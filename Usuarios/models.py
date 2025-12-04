@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 # Create your models here.
 
 class Usuario(AbstractUser):
@@ -16,3 +18,9 @@ class Usuario(AbstractUser):
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
+
+@receiver(post_save, sender=Usuario)
+def crear_carrito(sender, instance, created, **kwargs):
+    if created:
+        from Tienda.models import Carrito
+        Carrito.objects.create(usuario=instance)

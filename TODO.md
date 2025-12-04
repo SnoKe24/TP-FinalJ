@@ -1,0 +1,6 @@
+- [x] Move CarritoItem to be a separate class in Tienda/models.py
+- [x] Fix the ForeignKey in CarritoItem (change 'Carrito' to 'carrito' and ensure proper reference)
+- [x] Remove circular import and fix signal placement in Usuarios/models.py
+- [x] Add necessary imports (Carrito and CarritoItem) in Tienda/views.py
+- [x] Run python manage.py makemigrations and migrate if needed
+- [x] Test the application

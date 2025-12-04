@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from .models import Producto
+from .models import *
 from .forms import ProductoForm
-from django.http import HttpResponseForbidden
+from django.http import JsonResponse, HttpResponseForbidden
 
 def es_superadmin(user):
     return user.is_authenticated and user.rol == "superadmin"
@@ -52,3 +52,35 @@ def eliminar_producto(request, id):
     producto = get_object_or_404(Producto, id=id)
     producto.delete()
     return redirect('lista_productos')
+
+def obtener_carrito(usuario):
+    carrito, creado = Carrito.objects.get_or_create(usuario=usuario)
+    return carrito
+
+@login_required
+def agregar_al_carrito(request, producto_id):
+    producto = get_object_or_404(Producto, id=producto_id)
+
+    carrito, creado = Carrito.objects.get_or_create(usuario=request.user)
+
+    item, creado_item = CarritoItem.objects.get_or_create(
+        carrito=carrito,
+        producto=producto
+    )
+
+    if not creado_item:
+        item.cantidad += 1
+        item.save()
+
+    # devolver solo el HTML parcial
+    return render(request, 'Tienda/carrito_parcial.html', {'carrito': carrito})
+
+@login_required
+def carrito_parcial(request):
+    carrito = obtener_carrito(request.user)
+    return render(request, "Tienda/carrito_parcial.html", {"carrito": carrito})
+
+@login_required
+def ver_carrito(request):
+    carrito = obtener_carrito(request.user)
+    return render(request, "Tienda/carrito.html", {"carrito": carrito})

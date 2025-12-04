@@ -8,7 +8,7 @@
 <body>
     {% block content %}
     <h1>Bienvenido</h1>
-
+    <div id="carrito-contenedor" class="carrito-visible"></div>
     <a href="{% url 'lista_productos' %}">Ver Productos</a>
 
     {% if user.is_authenticated %}
@@ -28,5 +28,14 @@
     {% endif %}
     
     {% endblock %}
+    <script>
+        function agregar(id) {
+            fetch('/Tienda/agregar/' + id + '/')
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById('carrito-contenedor').innerHTML = html;
+            })
+        }
+    </script>
 </body>
 </html>
