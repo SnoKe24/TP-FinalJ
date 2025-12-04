@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from .models import *
 from .forms import ProductoForm
 from django.http import JsonResponse, HttpResponseForbidden
+from django.contrib import messages
 
 def es_superadmin(user):
     return user.is_authenticated and user.rol == "superadmin"
@@ -31,9 +32,6 @@ def crear_producto(request):
 
 @login_required
 def editar_producto(request, id):
-    if not es_superadmin(request.user):
-        return redirect('lista_productos')
-
     producto = get_object_or_404(Producto, id=id)
     form = ProductoForm(request.POST or None, request.FILES or None, instance=producto)
 
@@ -53,34 +51,28 @@ def eliminar_producto(request, id):
     producto.delete()
     return redirect('lista_productos')
 
-def obtener_carrito(usuario):
-    carrito, creado = Carrito.objects.get_or_create(usuario=usuario)
-    return carrito
 
-@login_required
-def agregar_al_carrito(request, producto_id):
-    producto = get_object_or_404(Producto, id=producto_id)
+def sobre_nosotros(request):
+    return render(request, 'sobre_nosotros.html')
 
-    carrito, creado = Carrito.objects.get_or_create(usuario=request.user)
-
-    item, creado_item = CarritoItem.objects.get_or_create(
-        carrito=carrito,
-        producto=producto
-    )
-
-    if not creado_item:
-        item.cantidad += 1
-        item.save()
-
-    # devolver solo el HTML parcial
-    return render(request, 'Tienda/carrito_parcial.html', {'carrito': carrito})
-
-@login_required
-def carrito_parcial(request):
-    carrito = obtener_carrito(request.user)
-    return render(request, "Tienda/carrito_parcial.html", {"carrito": carrito})
 
 @login_required
 def ver_carrito(request):
-    carrito = obtener_carrito(request.user)
-    return render(request, "Tienda/carrito.html", {"carrito": carrito})
+    carrito, created = Carrito.objects.get_or_create(usuario=request.user)
+    items = CarritoItem.objects.filter(carrito=carrito)
+    total = sum(item.total for item in items)
+    return render(request, 'carrito.html', {'items': items, 'total': total})
+
+
+@login_required
+def agregar_al_carrito(request, id):
+    producto = get_object_or_404(Producto, id=id)
+    carrito, created = Carrito.objects.get_or_create(usuario=request.user)
+    item, created = CarritoItem.objects.get_or_create(carrito=carrito, producto=producto)
+    if not created:
+        item.cantidad += 1
+        item.save()
+    messages.success(request, f'{producto.nombre} agregado al carrito.')
+    return redirect('lista_productos')
+
+

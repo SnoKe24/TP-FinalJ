@@ -1,6 +1,13 @@
-- [x] Move CarritoItem to be a separate class in Tienda/models.py
-- [x] Fix the ForeignKey in CarritoItem (change 'Carrito' to 'carrito' and ensure proper reference)
-- [x] Remove circular import and fix signal placement in Usuarios/models.py
-- [x] Add necessary imports (Carrito and CarritoItem) in Tienda/views.py
-- [x] Run python manage.py makemigrations and migrate if needed
-- [x] Test the application
+# TODO List for Home Page Redesign
+
+- [x] Add Carrito and CarritoItem models to Tienda/models.py
+- [x] Create migration for new models
+- [x] Add 'sobre_nosotros' view to Tienda/views.py
+- [x] Add 'ver_carrito' and 'agregar_al_carrito' views to Tienda/views.py
+- [x] Add URLs for 'sobre_nosotros' and cart in Tienda/urls.py
+- [x] Create Tienda/templates/sobre_nosotros.html
+- [x] Create Tienda/templates/carrito.html
+- [x] Create static/styles.css for common styles
+- [x] Redesign Tienda/templates/home.html with Bootstrap menu
+- [x] Update base template if needed
+- [x] Test the home page

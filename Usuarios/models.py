@@ -19,8 +19,4 @@ class Usuario(AbstractUser):
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
 
-@receiver(post_save, sender=Usuario)
-def crear_carrito(sender, instance, created, **kwargs):
-    if created:
-        from Tienda.models import Carrito
-        Carrito.objects.create(usuario=instance)
+

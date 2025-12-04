@@ -4,9 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inicio</title>
+    <title>Sobre Nosotros</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="{% static 'styles.css' %}">
+    <link rel="stylesheet" href="{% static 'style.css' %}">
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -21,13 +21,13 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item">
-                        <a class="nav-link active" href="{% url 'home' %}">Inicio</a>
+                        <a class="nav-link" href="{% url 'home' %}">Inicio</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'lista_productos' %}">Catálogo de Productos</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'sobre_nosotros' %}">Sobre Nosotros</a>
+                        <a class="nav-link active" href="{% url 'sobre_nosotros' %}">Sobre Nosotros</a>
                     </li>
                 </ul>
                 <ul class="navbar-nav">
@@ -56,20 +56,17 @@
     </nav>
 
     <div class="container mt-5">
-        <div class="jumbotron bg-primary text-white rounded p-5">
-            <h1 class="display-4">¡Bienvenido a Mi Tienda!</h1>
-            <p class="lead">Descubre nuestros productos de calidad.</p>
-            <a class="btn btn-light btn-lg" href="{% url 'lista_productos' %}" role="button">Ver Productos</a>
+        <div class="row">
+            <div class="col-md-8">
+                <h1>Sobre Nosotros</h1>
+                <p class="lead">Somos una tienda dedicada a ofrecer productos de calidad a nuestros clientes.</p>
+                <p>Nuestra misión es proporcionar una experiencia de compra excepcional con productos únicos y un servicio al cliente inigualable.</p>
+                <p>Fundada en 2023, hemos crecido gracias a la confianza de nuestros clientes y a nuestro compromiso con la calidad.</p>
+            </div>
+            <div class="col-md-4">
+                <img src="https://via.placeholder.com/400x300?text=Sobre+Nosotros" alt="Sobre Nosotros" class="img-fluid rounded">
+            </div>
         </div>
-
-        {% if user.is_authenticated %}
-            {% if user.rol == "superadmin" %}
-                <div class="mt-4">
-                    <a href="{% url 'lista_productos' %}" class="btn btn-primary">Lista de productos</a>
-                    <a href="{% url 'crear_producto' %}" class="btn btn-success">Agregar Producto</a>
-                </div>
-            {% endif %}
-        {% endif %}
     </div>
 
     <footer class="footer mt-5">
